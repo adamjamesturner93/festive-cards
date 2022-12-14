@@ -1,0 +1,310 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+$envelope-width: 60vh;
+$envelope-height: $envelope-width * 0.57;
+
+$envelope-colour: #dce5ec;
+$contrast-colour: #1e1e1e;
+
+#__next {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: 'Oswald', sans-serif;
+  background-color: $contrast-colour;
+}
+
+.card {
+  width: $envelope-width;
+  height: $envelope-height;
+
+  button {
+    background-color: $envelope-colour;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1em 2em;
+    border-radius: 6px;
+    border: none;
+    font-size: medium;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: inset 0 0 10px $contrast-colour;
+    }
+  }
+
+  &__content {
+    text-align: center;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    transition: transform 3s;
+    transform-style: preserve-3d;
+  }
+
+  &__front,
+  &__back {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    display: grid;
+    align-content: center;
+  }
+
+  &__front {
+    background: repeating-linear-gradient(
+      -45deg,
+      #fff,
+      #fff 20px,
+      rgb(255, 0, 0) 20px,
+      rgb(255, 0, 0) 40px
+    );
+    display: grid;
+    place-items: center;
+
+    & > .address {
+      height: $envelope-height * 0.85;
+      width: $envelope-width * 0.85;
+      background-color: $envelope-colour;
+      font-style: italic;
+      display: grid;
+      padding: 1% 20%;
+
+      & h1 {
+        font-size: 1.3em;
+        font-weight: normal;
+        align-self: end;
+        text-align: left;
+      }
+
+      & p {
+        font-size: 1.3em;
+        align-self: end;
+        text-align: right;
+      }
+    }
+  }
+
+  &__body {
+    font-weight: var(fw-normal);
+    font-size: 1.5rem;
+    line-height: 1.6;
+  }
+
+  &__back {
+    transform: rotateY(0.5turn);
+    color: var(--clr);
+    background: $envelope-colour;
+    transition: all 1s ease;
+
+    &::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      border-top: calc($envelope-height/2) solid transparent;
+      border-right: calc($envelope-width/2) solid $envelope-colour;
+      border-bottom: calc($envelope-height/2) solid $envelope-colour;
+      border-left: calc($envelope-width/2) solid transparent;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      z-index: 5;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      border-top: calc($envelope-height/2) solid transparent;
+      border-right: calc($envelope-width/2) solid transparent;
+      border-bottom: calc($envelope-height/2) solid transparent;
+      border-left: calc($envelope-width/2) solid $envelope-colour;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      z-index: 4;
+    }
+  }
+
+  &.ENVELOPE_REAR {
+    .card__content {
+      transform: rotateY(0.5turn);
+    }
+  }
+
+  &.ENVELOPE_SEAL {
+    .seal {
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+  }
+
+  &.ENVELOPE_OPEN {
+    .cover::after {
+      transform: rotateX(180deg);
+      transition: all 1s ease;
+      z-index: 3;
+    }
+  }
+
+  &.ENVELOPE_HIDDEN {
+    .card__back {
+      transition: background 1s ease 4s;
+      background: transparent;
+      &::before,
+      &::after {
+        transition: border-color 1s ease 4s;
+        border-color: transparent;
+      }
+    }
+    .cover::after {
+      transition: border-color 1s ease 4s;
+      border-color: transparent;
+    }
+    .letter {
+      animation: openEnvelope 3s ease 1s;
+      bottom: $envelope-height * -0.15;
+      height: calc($envelope-height * 1.3);
+      z-index: 5;
+      transform-style: preserve-3d;
+    }
+  }
+
+  &.CARD_FRONT,
+  &.CARD_REAR {
+    .letter {
+      transition: all 2s ease;
+    }
+  }
+
+  &.CARD_FRONT {
+    .letter {
+      transform: rotateY(0turn);
+    }
+  }
+
+  &.CARD_REAR {
+    .letter {
+      transform: rotateY(0.5turn);
+    }
+  }
+
+  .cover {
+    position: absolute;
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.4);
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      border-top: calc($envelope-height/2) solid darken($envelope-colour, 2%);
+      border-right: calc($envelope-width/2) solid transparent;
+      border-bottom: calc($envelope-height/2) solid transparent;
+      border-left: calc($envelope-width/2) solid transparent;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      z-index: 6;
+      transform-origin: top;
+      transform: rotateX(0deg);
+      transition: all 1s ease;
+    }
+  }
+
+  .letter {
+    position: absolute;
+    z-index: 3;
+    bottom: $envelope-height * 0.05;
+    left: $envelope-width * 0.05;
+    width: calc($envelope-width * 0.9);
+    height: calc($envelope-height * 0.9);
+    transition: all 1s ease 1s;
+
+    &__front,
+    &__back {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      backface-visibility: hidden;
+      transform-style: preserve-3d;
+      display: grid;
+      align-content: center;
+    }
+
+    &__front {
+      background: bisque;
+      place-items: center;
+      overflow: hidden;
+
+      img {
+        position: absolute;
+        top: 0;
+      }
+    }
+
+    &__back {
+      transform: rotateY(0.5turn);
+      color: var(--clr);
+      background: #eb8686;
+      text-align: center;
+      font-style: italic;
+      font-size: larger;
+      padding: 10%;
+    }
+  }
+
+  .seal {
+    position: absolute;
+    width: $envelope-width/5;
+    height: $envelope-height/5;
+    background-color: red;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 100%;
+    z-index: 6;
+    color: white;
+    display: grid;
+    place-items: center;
+    box-shadow: 0px 2px 2px black;
+    background-image: url(/AND%20Digital_LOGO_RGB_ON_WHITE.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+}
+
+@keyframes openEnvelope {
+  0% {
+    bottom: $envelope-height * 0.05;
+    height: calc($envelope-height * 0.9);
+    z-index: 4;
+  }
+  49% {
+    bottom: $envelope-height * 0.7;
+    height: calc($envelope-height * 1.3);
+    z-index: 4;
+  }
+  51% {
+    bottom: $envelope-height * 0.7;
+    height: calc($envelope-height * 1.3);
+    z-index: 5;
+  }
+  100% {
+    bottom: $envelope-height * -0.15;
+    height: calc($envelope-height * 1.3);
+    z-index: 5;
+  }
+}
