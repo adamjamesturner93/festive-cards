@@ -59,7 +59,7 @@ const Card = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <div className={`card ${cardState}`}>
+    <main className={`card ${cardState}`}>
       <div className="card__content">{children}</div>
 
       {secondsPassed === 0 ? (
@@ -69,7 +69,7 @@ const Card = ({ children }: { children: ReactNode }) => {
           {cardState === CardState.CARD_FRONT ? 'See back' : 'See front'}
         </button>
       ) : null}
-    </div>
+    </main>
   );
 };
 

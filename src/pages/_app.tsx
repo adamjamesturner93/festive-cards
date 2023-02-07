@@ -1,18 +1,16 @@
 import type { AppProps } from 'next/app';
-import { Roboto } from '@next/font/google';
-
-const roboto = Roboto({
-  weight: '400',
-  subsets: ['latin'],
-});
+import Head from 'next/head';
 
 import '../styles/envelope.scss';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <main className={roboto.className}>
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
       <Component {...pageProps} />
-    </main>
+    </>
   );
 }
 

@@ -1,10 +1,10 @@
-export function CardFront({ to }: { to: string }) {
+export function CardFront() {
   return (
     <div className="card__front">
-      <div className="address">
-        <h1>To {to}</h1>
-        <p>From Club Grace</p>
-      </div>
+      <img
+        src={'/images/2022/christmas/greeting.svg'}
+        alt="Christmas postcard with the text: We go together like Chestnuts and an Open Fire."
+      />
     </div>
   );
 }
